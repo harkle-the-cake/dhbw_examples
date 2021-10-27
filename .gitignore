@@ -18,6 +18,7 @@
 *.zip
 *.tar.gz
 *.rar
+<<<<<<< HEAD
 *.hprof
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
@@ -25,3 +26,8 @@ hs_err_pid*
 /.idea/
 /.gradle/
 /pom.xml
+=======
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+>>>>>>> 81fe1a2ea59e290ff18f6f29c3120937b9d4ec98
