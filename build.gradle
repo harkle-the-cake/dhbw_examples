@@ -34,6 +34,18 @@ task customFatJarServer(type: Jar) {
     with jar
 }
 
+
+task customFatJarWebserver(type: Jar) {
+    manifest {
+        attributes "Main-Class": "eu.boxwork.examples.webservice.Webserver"
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } } {
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    }
+    with jar
+}
+
 task customFatJarClient(type: Jar) {
     manifest {
         attributes "Main-Class": "eu.boxwork.examples.webservice.Client"
