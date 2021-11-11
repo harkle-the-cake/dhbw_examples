@@ -4,6 +4,8 @@ import eu.boxwork.example.webservice.Webserver;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Date;
+
 /**
  * service end point for a device, all tokens are device tokens
  * */
@@ -44,7 +46,7 @@ public class Service {
 				.entity("{\"answer\":\""+response+"\"}").build();
 		return b;
 	}
-	
+
 	@GET // Method type used by the client to get the current user-id for this screen
 	@Path( "answer/{r}/" ) // sub path hello => http://<serverip>/rest/hello/name of user
 	@Produces({ MediaType.TEXT_PLAIN  }) // we return a json to be parsed
@@ -100,6 +102,21 @@ public class Service {
 				.header("content-type", "text/html")
 				.header("Access-Control-Allow-Origin", "*")
 				.entity(toHTML(response)).build();
+		return b;
+	}
+
+
+	@GET // Method type used by the client to get the current user-id for this screen
+	@Path( "time" ) // sub path hello => http://<serverip>/rest/hello/name of user
+	@Produces({ MediaType.TEXT_HTML  }) // we return a json to be parsed
+	public Response getTimeAsHTML() // we don't use any auth, but we could
+	{
+		Response b;
+		String time = (new Date()).toString();
+				b = Response.status(200)
+				.header("content-type", "text/html")
+				.header("Access-Control-Allow-Origin", "*")
+				.entity(toHTML(time)).build();
 		return b;
 	}
 
