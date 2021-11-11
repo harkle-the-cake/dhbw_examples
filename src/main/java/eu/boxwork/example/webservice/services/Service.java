@@ -112,7 +112,8 @@ public class Service {
 	public Response getTimeAsHTML() // we don't use any auth, but we could
 	{
 		Response b;
-		String time = (new Date()).toString();
+		Date d = new Date();
+		String time = d.toString() + " - " +d.toGMTString();
 				b = Response.status(200)
 				.header("content-type", "text/html")
 				.header("Access-Control-Allow-Origin", "*")
