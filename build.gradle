@@ -37,7 +37,7 @@ task customFatJarServer(type: Jar) {
 
 task customFatJarWebserver(type: Jar) {
     manifest {
-        attributes "Main-Class": "eu.boxwork.examples.webservice.Webserver"
+        attributes "Main-Class": "eu.boxwork.example.webservice.Webserver"
     }
 
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } } {
