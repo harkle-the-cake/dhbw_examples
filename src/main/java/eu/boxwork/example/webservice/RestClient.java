@@ -14,8 +14,8 @@ import javax.ws.rs.core.MediaType;
 public class RestClient {
     private static final Logger logger = LogManager.getLogger(RestClient.class);
     private static String SERVICE_PATH_HELLO = Service.SERVICE_PATH;
-    private static final int CONNECT_TIMEOUT = 1000;
-    private static final int READ_TIMEOUT = 1000;
+    private static final int CONNECT_TIMEOUT = 10000;
+    private static final int READ_TIMEOUT = 30000;
     private String base = "";
     private String SERVICE_BASE = "";
     private String userId = "";
@@ -143,7 +143,7 @@ public class RestClient {
             b.header("user", userId);
             b.header("authorize", authorization);
 
-            ClientResponse response = b.get(ClientResponse.class);
+             ClientResponse response = b.get(ClientResponse.class);
             int status = response.getStatus();
 
             if (status==200)
@@ -188,10 +188,13 @@ public class RestClient {
 
         if (client.connect())
         {
-            String helloString = client.requestHello(word);
-            String helloJSONString = client.requestHelloJSON(word).toString();
-            logger.info("Response as String: "+helloString);
-            logger.info("Response as JSON "+helloJSONString);
+            while(true)
+            {
+                String helloString = client.requestHello(word);
+                String helloJSONString = client.requestHelloJSON(word).toString();
+                logger.info("Response as String: "+helloString);
+                logger.info("Response as JSON "+helloJSONString);
+            }
         }
         else {
             logger.error("unable to connect to: "+serverURL);

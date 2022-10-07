@@ -1,5 +1,4 @@
 package eu.boxwork.example.webservice.services;
-import eu.boxwork.example.webservice.Webserver;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -9,7 +8,7 @@ import java.util.Date;
 /**
  * service end point for a device, all tokens are device tokens
  * */
-@Path( Webserver.BASEURL+Service.SERVICE_PATH) // set the root path of this service
+@Path( "example"+Service.SERVICE_PATH) // set the root path of this service
 public class Service {
 	public static final String SERVICE_PATH = "/service/";
 		
