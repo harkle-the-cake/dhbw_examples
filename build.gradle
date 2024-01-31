@@ -22,37 +22,54 @@ repositories {
     jcenter()
 }
 
-task customFatJarServer(type: Jar) {
+tasks.register('customFatJarHTTPServer', Jar) {
     manifest {
-        attributes "Main-Class": "eu.boxwork.examples.webservice.Server"
+        attributes "Main-Class": "eu.boxwork.examples.http.HTTPWebserver"
     }
- 
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } } {
-    		exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    archiveBaseName = 'httpserver'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+tasks.register('customFatJarDOSClient', Jar) {
+    manifest {
+        attributes "Main-Class": "eu.boxwork.examples.http.DOSClient"
     }
+    archiveBaseName = 'dosclient'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
 
 
-task customFatJarWebserver(type: Jar) {
+tasks.register('customFatJarHTTPClient', Jar) {
     manifest {
-        attributes "Main-Class": "eu.boxwork.example.webservice.Webserver"
+        attributes "Main-Class": "eu.boxwork.examples.http.HTTPClient"
     }
-
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } } {
-        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
-    }
+    archiveBaseName = 'httpclient'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
 
-task customFatJarClient(type: Jar) {
+tasks.register('customFatJarRestserver', Jar) {
     manifest {
-        attributes "Main-Class": "eu.boxwork.examples.webservice.Client"
+        attributes "Main-Class": "eu.boxwork.examples.webservice.Webserver"
     }
+    archiveBaseName = 'restserver'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
 
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } } {
-        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+tasks.register('customFatJarRestclient', Jar) {
+    manifest {
+        attributes "Main-Class": "eu.boxwork.examples.webservice.RestClient"
     }
+    archiveBaseName = 'restclient'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
 
