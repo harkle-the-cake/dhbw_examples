@@ -1,26 +1,25 @@
-tasks:
-  - name: copy the app to the target
-    copy:
-      src: "{{ build_root }}/webserver-{{ version }}.jar"
-      dest: "{{ app_root }}/server.jar"
-      remote_src: yes
-    become: yes
-    tags: app
-  - name: copy the app start file to the target
-    copy:
-      src: "start.sh"
-      dest: "{{ app_root }}"
-      remote_src: yes
-    become: yes
-    tags: app
-  - name: register the server as linux service
-    copy:
-      src: "webserver.service"
-      dest: "{{ app_root }}"
-      remote_src: yes
-    become: yes
-    tags: app
-  - name: Restart service in all cases
-    ansible.builtin.service:
-      name: webserver
-      state: restarted
+- name: copy the app to the target
+  copy:
+    src: "{{ build_root }}/webserver-{{ version }}.jar"
+    dest: "{{ app_root }}/server.jar"
+    remote_src: yes
+  become: yes
+  tags: app
+- name: copy the app start file to the target
+  copy:
+    src: "start.sh"
+    dest: "{{ app_root }}"
+    remote_src: yes
+  become: yes
+  tags: app
+- name: register the server as linux service
+  copy:
+    src: "webserver.service"
+    dest: "{{ app_root }}"
+    remote_src: yes
+  become: yes
+  tags: app
+- name: Restart service in all cases
+  service:
+    name: webserver
+    state: restarted
