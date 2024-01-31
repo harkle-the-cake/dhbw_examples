@@ -5,4 +5,5 @@
     - vars/common.yml
     - vars/webserver.yml
   roles:
+    - common
     - webserver
