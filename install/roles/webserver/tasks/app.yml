@@ -13,9 +13,9 @@
   become: yes
   tags: app
 - name: register the server as linux service
-  copy:
+  template:
     src: "webserver.service"
-    dest: "{{ app_root }}"
+    dest: "/etc/systemd/system/"
     remote_src: no
   become: yes
   tags: app
