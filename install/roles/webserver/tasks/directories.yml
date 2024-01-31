@@ -1,0 +1,13 @@
+- name: create www directory
+  file:
+    path: "{{ web_root }}/"
+    state: directory
+  become: yes
+  tags: structure
+
+- name: create app directory
+  file:
+    path: "{{ app_root }}/"
+    state: directory
+  become: yes
+  tags: structure

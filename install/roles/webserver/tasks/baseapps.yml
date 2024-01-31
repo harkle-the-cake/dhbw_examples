@@ -1,0 +1,12 @@
+#- name: ensure certain tools and java are NOT installed
+#  apt:
+#    name: [ 'default-jre-headless', 'openjdk-9-jre-headless','openjdk-9-jre' ]
+#    state: absent
+#  become: yes
+#  tags: programs
+- name: ensure certain tools are installed
+  apt:
+    name: [ 'openssl','openjdk-17-jdk-headless']
+    state: present
+  become: yes
+  tags: programs
