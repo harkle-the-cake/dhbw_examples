@@ -1,0 +1,6 @@
+systemgroup: "system"
+systemroot: "/home/system"
+dockerroot: "{{ systemroot }}/dockers"
+dockercompose: "{{ systemroot }}/dockercompose"
+networks: "127.0.0.1, 10.10.10.0/24, 192.168.180.0/24"
+syslogserver: "monitoring"

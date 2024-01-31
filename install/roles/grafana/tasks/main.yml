@@ -1,0 +1,68 @@
+- name: Add the user grafana user with a specific uid and a primary group of '{{ systemgroup }}'
+  user:
+    name: "{{ grafanauser }}"
+    comment: grafana user
+    shell: /bin/bash
+    groups: "{{ systemgroup }}"
+    append: yes
+  become: yes
+- name: install grafana as docker in latest version
+  shell:
+    cmd: 'docker pull grafana/grafana'
+  become: yes
+  tags: programs
+- name: create config directory
+  file:
+    path: /etc/grafana/
+    state: directory
+    owner: "{{ grafanauser }}"
+    group: "{{ systemgroup }}"
+  tags: structure
+  become: yes
+- name: create log directory
+  file:
+    path: "{{ grafanalogs }}"
+    state: directory
+    owner: "{{ grafanauser }}"
+    group: "{{ systemgroup }}"
+    mode: 0777
+  tags: structure
+  become: yes
+- name: copy grafana.docker start to docker root
+  template:
+    src: grafana.docker
+    dest: "{{ dockerroot }}/grafana.docker"
+    owner: "{{ grafanauser }}"
+    group: "{{ systemgroup }}"
+    mode: 0750
+  become: yes
+- name: copy ini file
+  template:
+    src: grafana.ini
+    dest: "/etc/grafana/grafana.ini"
+    owner: "{{ grafanauser }}"
+    group: "{{ systemgroup }}"
+    mode: 0755
+  become: yes
+- block:
+    - name: remove the old container
+      shell:
+        cmd: 'docker stop grafana && docker rm grafana'
+      become: yes
+      tags: programs
+  rescue:
+    - name: nothing to remove
+      shell: "echo 'nothing to remove'"
+      become: yes
+      tags: programs
+- block:
+  - name: start the container grafana
+    shell:
+      cmd: '{{ dockerroot }}/grafana.docker'
+    become: yes
+    tags: programs
+  rescue:
+  - name: restart the container rabbitmq
+    shell: docker restart grafana
+    become: yes
+    tags: programs

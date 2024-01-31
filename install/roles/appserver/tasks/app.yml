@@ -1,0 +1,24 @@
+tasks:
+  - name: Unarchive a file that needs to be downloaded for website
+    unarchive:
+      src: http://192.168.179.3:8083/repository/artmon/app_server_latest.tar
+      dest: /src/www
+      remote_src: yes
+    become: yes
+    tags: app 
+  - name: Clean www path
+    file:
+      state: absent
+      path: /src/www/artmon
+    tags: app 
+  - name: move 'artmon_app' to 'artmon'
+    command: mv /src/www/artmon_app /src/www/artmon	
+    become: yes  
+    tags: app 
+  - name: create symlink to the data
+    file:
+      src: /data/thumbs
+      dest: /src/www/artmon/thumbs
+      state: link
+    become: yes
+    tags: app 

@@ -1,0 +1,19 @@
+127.0.0.1       localhost
+::1             localhost ip6-localhost ip6-loopback
+ff02::1         ip6-allnodes
+ff02::2         ip6-allrouters
+
+127.0.1.1       {{ hostname }}
+
+10.10.10.1  stratozero cln01 ek1
+10.10.10.2 controlbox jukebox cln04
+10.10.10.6 serverbox cln02 webserver ek2
+10.10.10.10 control cln03
+10.10.10.100  picln01
+10.10.10.101  picln02
+10.10.10.102  picln03
+10.10.10.103  picln04
+10.10.10.200  picln05 monitoring
+
+10.10.10.4 macbook hfmmacbook
+10.10.10.5 imac hfmimac

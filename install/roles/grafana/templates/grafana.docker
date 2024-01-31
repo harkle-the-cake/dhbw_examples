@@ -1,0 +1,8 @@
+docker run --name grafana \
+-d \
+--restart unless-stopped \
+-p {{ grafanaport }}:3000 \
+--restart unless-stopped \
+--mount type=bind,source={{ grafanalogs }},target=/var/log/grafana \
+--mount type=bind,source=/etc/grafana/,target=/etc/grafana \
+grafana/grafana

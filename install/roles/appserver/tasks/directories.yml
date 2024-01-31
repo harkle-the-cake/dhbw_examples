@@ -1,0 +1,6 @@
+- name: create www directory
+  file:
+    path: "{{ web_root }}/"
+    state: directory
+  become: yes
+  tags: structure

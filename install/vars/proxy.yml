@@ -1,0 +1,3 @@
+client_max_body_size: "100M"
+client_max_body_size_page: "100M"
+trusted_domains: "jukebox.dynalias.org,*.boxwork-backend.de,*.boxwork.eu,*.ask-ki.net"

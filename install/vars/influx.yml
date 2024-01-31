@@ -1,0 +1,3 @@
+data_root: "/home/system/influx"
+config_root: "/etc/influx"
+influxuser: "influx"

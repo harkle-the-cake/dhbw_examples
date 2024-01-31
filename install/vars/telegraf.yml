@@ -1,0 +1,3 @@
+data_root: "/home/system/telegraf"
+config_root: "/etc/telegraf"
+telegrafuser: "telegraf"

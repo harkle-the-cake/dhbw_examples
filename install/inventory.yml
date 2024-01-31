@@ -1,0 +1,8 @@
+[reverseproxy]
+192.168.180.20 type=internal ansible_user=pi hostname=proxy
+
+[appserver]
+192.168.180.21 type=internal ansible_user=pi hostname=appserver
+
+[monitoring]
+192.168.180.22 type=internal ansible_user=pi hostname=monitoring

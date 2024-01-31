@@ -1,0 +1,19 @@
+- name: ensure nginx is at the latest version
+  apt:
+    name: nginx
+    state: latest
+  become: yes
+  tags: programs
+- name: copy the nginx config file and restart nginx
+  template:
+    src: sites.config
+    dest: /etc/nginx/sites-available/static_site.cfg
+    owner: www-data
+    group: www-data
+    mode: 0644
+  become: yes
+  tags: config
+- name: reload nginx
+  service:
+    name: nginx
+    state: reloaded

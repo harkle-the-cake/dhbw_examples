@@ -1,0 +1,4 @@
+web_root: "{{ systemroot }}/www"
+client_max_body_size: "100M"
+client_max_body_size_page: "100M"
+service_host: "jukebox.dynalias.org"

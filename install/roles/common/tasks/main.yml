@@ -1,0 +1,116 @@
+---
+#- include_tasks: update.yml
+- block:
+    - name: Update APT package cache
+      apt: update_cache=yes cache_valid_time=600
+      tags: os   
+      become: yes
+    - name: Upgrade APT to the latest packages
+      apt: upgrade=dist
+      tags: os   
+      become: yes
+  rescue:
+    - name: update release information
+#      shell: apt-get update --allow-releaseinfo-change
+      shell: apt-get update --allow-releaseinfo-change
+      become: yes
+      tags: os
+#- import_tasks: folders.yml
+- name: clear tmp directory
+  file:
+    path: /tmp/deploy
+    state: absent
+  tags: structure
+  become: yes 
+- name: create temp directory
+  file:
+    path: /tmp/deploy
+    state: directory
+  tags: structure
+  become: yes
+- name: Ensure group system group exists
+  group:
+    name: "{{ systemgroup }}"
+    state: present
+  tags: structure
+  become: yes
+- name: create system folder for root only and system accessable
+  file:
+    path: "{{ systemroot }}"
+    state: directory
+    owner: root
+    group: "{{ systemgroup }}"
+    mode: '1755'
+  tags: structure
+  become: yes
+- name: create system folder scripts
+  file:
+    path: "{{ systemroot }}/scripts"
+    state: directory
+    owner: root
+    group: "{{ systemgroup }}"
+    mode: '1755'
+  tags: structure
+  become: yes
+- name: create docker root directory
+  file:
+    path: "{{ dockerroot }}"
+    state: directory
+    owner: root
+    group: "{{ systemgroup }}"
+    mode: '1755'
+  tags: structure
+  become: yes
+- name: ensure certain base tools are installed, like ca certificate, openssl, docker.io, openvpn, default-jdk, net-tools, logrotate, rsyslog, docker-compose, vim, systemd,rsync
+  apt:
+    name: [ 'ca-certificates','openssl','docker.io','docker','openvpn','default-jdk','net-tools','logrotate','rsyslog','docker-compose','vim', 'systemd', 'rsync']
+    state: present
+  become: yes
+  tags: programs
+- name: change hostname
+  shell: 'hostname -b {{ hostname }}'
+  become: yes
+  tags: config
+- name: copy hostname
+  template:
+    src: 'hostname'
+    dest: '/etc/hostname'
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  tags: config
+- name: copy hosts
+  template:
+    src: 'hosts_{{ type }}'
+    dest: '/etc/hosts'
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  tags: config
+- name: copy logrotate
+  template:
+    src: 'logrotate.conf'
+    dest: '/etc/logrotate.d/common.conf'
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  tags: config
+- name: add the syslog config
+  when: hostname is defined and hostname != 'monitorpi'
+  template:
+    src: 'rsyslog.conf'
+    dest: '/etc/rsyslog.conf'
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+- name: restart syslog as service
+  when: hostname is defined and hostname != 'monitorpi'
+  service:
+    name: "rsyslog"
+    state: restarted
+  become: yes
+  tags: app

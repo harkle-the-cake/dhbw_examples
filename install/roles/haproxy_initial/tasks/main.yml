@@ -1,0 +1,24 @@
+- name: no apache and nginx should be available
+  apt:
+    name: [ 'apache2','nginx' ]
+    state: absent
+  become: yes
+  tags: programs
+- name: install ha proxy
+  apt:
+    name: [ 'haproxy' ]
+    state: present
+  become: yes
+  tags: programs
+- name: add ha proxy config
+  template:
+    src: 'haproxy_master_config.txt'
+    dest: '/etc/haproxy/haproxy.cfg'
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+- name: reload ha proxy
+  service:
+    name: haproxy
+    state: reloaded

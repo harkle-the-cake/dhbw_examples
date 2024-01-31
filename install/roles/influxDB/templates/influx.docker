@@ -1,0 +1,6 @@
+docker run -d -p 8086:8086 \
+      --name influx \
+      --env-file={{ dockerroot }}/.influx.env \
+      --mount type=bind,source={{ data_root }},target=/var/lib/influxdb2 \
+      --mount type=bind,source={{ config_root }},target=/etc/influxdb2 \
+      influxdb:2.7

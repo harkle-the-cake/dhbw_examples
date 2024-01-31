@@ -1,0 +1,71 @@
+- name: Add the influx user '{{ systemgroup }}'
+  user:
+    name: "{{ telegrafuser }}"
+    comment: telegraf user
+    shell: /bin/bash
+    groups: "{{ systemgroup }}"
+    append: yes
+  become: yes
+- name: create influx data directory
+  file:
+    path: "{{ data_root }}"
+    state: directory
+    owner: "{{ telegrafuser }}"
+    group: "{{ systemgroup }}"
+    mode: 0775
+  tags: structure
+  become: yes
+- name: create influx config directory
+  file:
+    path: "{{ config_root }}"
+    state: directory
+    owner: "{{ telegrafuser }}"
+    group: "{{ systemgroup }}"
+    mode: 0775
+  tags: structure
+  become: yes
+- name: copy config to config folder '{{ config_root }}'
+  copy:
+    src: telegraf.conf
+    dest: "{{ config_root }}/telegraf.conf"
+    owner: "{{ telegrafuser }}"
+  become: yes
+  tags: config
+- name: copy influx.docker start to docker root
+  template:
+    src: "telegraf.docker"
+    dest: "{{ dockerroot }}/telegraf.docker"
+    owner: www-data
+    group: "{{ systemgroup }}"
+    mode: 0750
+  become: yes
+- name: copy env file as a base template to docker root
+  template:
+    src: env-file
+    dest: "{{ dockerroot }}/.telegraf.env"
+    owner: www-data
+    group: "{{ systemgroup }}"
+    mode: 0750
+  become: yes
+- block:
+    - name: remove the old container
+      shell:
+        cmd: 'docker stop telegraf && docker rm telegraf'
+      become: yes
+      tags: programs
+  rescue:
+    - name: nothing to remove
+      shell: "echo 'nothing to remove'"
+      become: yes
+      tags: programs
+- block:
+    - name: start the container
+      shell:
+        cmd: '{{ dockerroot }}/telegraf.docker'
+      become: yes
+      tags: programs
+  rescue:
+    - name: restart the container
+      shell: "docker restart telegraf"
+      become: yes
+      tags: programs

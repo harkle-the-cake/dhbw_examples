@@ -1,0 +1,102 @@
+global
+        log /dev/log    local0
+        log /dev/log    local1 notice
+        chroot /var/lib/haproxy
+        stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+        stats timeout 30s
+        user haproxy
+        group haproxy
+        daemon
+
+        ssl-server-verify none
+        # Default SSL material locations
+        ca-base {{ ssl_dir }}/{{ domain }}
+        crt-base {{ ssl_dir }}/{{ domain }}
+
+        # Default ciphers to use on SSL-enabled listening sockets.
+        # For more information, see ciphers(1SSL). This list is from:
+        #  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
+        # An alternative list with additional directives can be obtained from
+        #  https://mozilla.github.io/server-side-tls/ssl-config-generator/?server=haproxy
+        ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS
+        ssl-default-bind-options no-sslv3
+
+defaults
+        defaults
+        mode                    http
+        log                     global
+        option                  httplog
+        option                  dontlognull
+        option http-server-close
+        option forwardfor       except 127.0.0.0/8
+        option                  redispatch
+        retries                 3
+        timeout http-request    10s
+        timeout queue           1m
+        timeout connect         10s
+        timeout client          1m
+        timeout server          1m
+        timeout http-keep-alive 10s
+        timeout check           10s
+        maxconn                 3000
+        errorfile 400 /etc/haproxy/errors/400.http
+        errorfile 403 /etc/haproxy/errors/403.http
+        errorfile 408 /etc/haproxy/errors/408.http
+        errorfile 500 /etc/haproxy/errors/500.http
+        errorfile 502 /etc/haproxy/errors/502.http
+        errorfile 503 /etc/haproxy/errors/503.http
+        errorfile 504 /etc/haproxy/errors/504.http
+
+# The frontend only listens on port 80
+# If it detects a LetsEncrypt request, is uses the LE backend
+# Else it goes to the default backend for the web servers
+frontend fe-{{ domain }}
+    bind *:80
+
+    # This is our new config that listens on port 443 for SSL connections
+    bind *:443 ssl crt {{ ssl_dir }}/{{ domain }}/fullchainpriv.pem
+
+    http-response set-header Access-Control-Allow-Origin "{{ trusted_domains }}"
+    http-response set-header Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization, JSNLog-RequestId, activityId, applicationId, applicationUserId, channelId, senderId, sessionId"
+    http-response set-header Access-Control-Max-Age 3628800
+    http-response set-header Access-Control-Allow-Methods "GET, DELETE, OPTIONS, POST, PUT"
+
+    option http-server-close
+    option forwardfor
+########################### ACLs
+    acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+    acl msg-url-elektrocut-prod url_reg ^\/{{ service_elektrocut }}/prod/.*
+    acl msg-url-elektrocut-int url_reg ^\/{{ service_elektrocut }}/int/.*
+    acl msg-url-discover url_reg ^\/discovery/.*
+########################### RULES
+    use_backend letsencrypt-{{ domain }} if letsencrypt-acl
+    use_backend be-{{ domain }}-elektrocut-prod  if  msg-url-elektrocut-prod
+    use_backend be-{{ domain }}-elektrocut-int  if  msg-url-elektrocut-int
+    use_backend be-www.boxwork-backend.de-discovery if msg-url-discover
+########################### DEFAULT
+    default_backend be-{{ domain }}
+
+# LE Backend
+backend letsencrypt-{{ domain }}
+    server letsencrypt 127.0.0.1:{{ letsenrypt_port }}
+
+
+# Normal (default) Backend
+# for web app servers
+backend be-{{ domain }}
+    server wsDefault1 {{ webserver_master_default }}:80 check
+
+# for elektrocut
+# PROD
+backend be-{{ domain }}-elektrocut-prod
+    option httpchk GET /elektrocut/prod/service/mon/
+    server wsElektrocut1 {{ webserver_master_ek }}:80 check
+    server wsElektrocut2 {{ webserver_slave_ek }}:80 check backup
+# INT
+backend be-{{ domain }}-elektrocut-int
+    server wsElektrocut1 {{ webserver_master_ek }}:80 check
+    server wsElektrocut2 {{ webserver_slave_ek }}:80 check backup
+
+backend be-www.boxwork-backend.de-discovery
+    server discovery1 control:10000 check
+    server discovery2 controlbox:10000 check backup

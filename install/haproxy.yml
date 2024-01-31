@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    server_master: appserver
+    app: app
+  vars_files:
+    - vars/common.yml
+    - vars/proxy.yml
+  roles:
+    - common
+    - haproxy
