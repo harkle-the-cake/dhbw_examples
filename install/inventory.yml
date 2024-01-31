@@ -6,3 +6,7 @@
 
 [monitoring]
 192.168.180.22 type=internal ansible_user=pi hostname=monitoring
+
+
+[webserver]
+192.168.180.196 type=internal ansible_user=pi hostname=appserver
