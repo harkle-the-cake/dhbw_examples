@@ -24,7 +24,7 @@ repositories {
 
 tasks.register('customFatJarHTTPServer', Jar) {
     manifest {
-        attributes "Main-Class": "eu.boxwork.examples.http.HTTPWebserver"
+        attributes "Main-Class": "eu.boxwork.example.http.HTTPWebserver"
     }
     archiveBaseName = 'httpserver'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -34,7 +34,7 @@ tasks.register('customFatJarHTTPServer', Jar) {
 
 tasks.register('customFatJarDOSClient', Jar) {
     manifest {
-        attributes "Main-Class": "eu.boxwork.examples.http.DOSClient"
+        attributes "Main-Class": "eu.boxwork.example.http.DOSClient"
     }
     archiveBaseName = 'dosclient'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -45,7 +45,7 @@ tasks.register('customFatJarDOSClient', Jar) {
 
 tasks.register('customFatJarHTTPClient', Jar) {
     manifest {
-        attributes "Main-Class": "eu.boxwork.examples.http.HTTPClient"
+        attributes "Main-Class": "eu.boxwork.example.http.HTTPClient"
     }
     archiveBaseName = 'httpclient'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -55,7 +55,7 @@ tasks.register('customFatJarHTTPClient', Jar) {
 
 tasks.register('customFatJarRestserver', Jar) {
     manifest {
-        attributes "Main-Class": "eu.boxwork.examples.webservice.Webserver"
+        attributes "Main-Class": "eu.boxwork.example.webservice.Webserver"
     }
     archiveBaseName = 'restserver'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -65,7 +65,7 @@ tasks.register('customFatJarRestserver', Jar) {
 
 tasks.register('customFatJarRestclient', Jar) {
     manifest {
-        attributes "Main-Class": "eu.boxwork.examples.webservice.RestClient"
+        attributes "Main-Class": "eu.boxwork.example.webservice.RestClient"
     }
     archiveBaseName = 'restclient'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
