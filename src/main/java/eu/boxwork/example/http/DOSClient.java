@@ -109,7 +109,9 @@ public class DOSClient implements Runnable{
 	/**
 	 * Testmain zur Pr�fung der bereitgestellten Methoden
 	 * ein Parameter:
+	 * ip:port
 	 * single | multi
+	 * send data true/false
 	 * für die Anzahl der Threads
 	 * */
 	public static void main(String[] args) {

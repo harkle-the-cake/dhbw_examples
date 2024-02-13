@@ -18,12 +18,14 @@ public class HTTPWebserver implements Runnable{
 	/*
 	 * private Objekte
 	 * */
-	public static final int PORT = 8080;
+	public static final int DEFAULT_PORT = 8080;
 	private Thread runner = null;
 	private boolean active=true;
 	private ServerSocket serverSocket = null;
 	private static int THROTTLE = 200;
 	private MODE modeToRune = MODE.SINGLE_THREADED;
+
+	private static int port = DEFAULT_PORT;
 
 	/*
 	 * oeffentliche Einstellungen
@@ -41,8 +43,8 @@ public class HTTPWebserver implements Runnable{
 		}
 
 		try {
-			Log.info("starting listening on port: "+PORT);
-		    serverSocket = new ServerSocket(PORT);	
+			Log.info("starting listening on port: "+port);
+		    serverSocket = new ServerSocket(port);
 		    runner.start();
 		}	catch (Exception e) {
 			Log.error(e.getLocalizedMessage());
@@ -112,8 +114,10 @@ public class HTTPWebserver implements Runnable{
 
 	/**
 	 * Testmain zur Pr�fung der bereitgestellten Methoden
-	 * ein Parameter:
-	 * single | multi
+	 * Parameter:
+	 * single | multi (String)
+	 * port (INT)
+	 * throttle (INT)
 	 * f�r die Anzahl der Threads
 	 * */
 	public static void main(String[] args) {
@@ -138,10 +142,16 @@ public class HTTPWebserver implements Runnable{
 			ws.setModeToRune(MODE.SINGLE_THREADED);
 		}
 
+
 		if (args.length>1)
 		{
+			port = Integer.parseInt(args[1]);
+		}
+
+		if (args.length>2)
+		{
 			try {
-				ws.setThrottle( Integer.parseInt(args[1]) );
+				ws.setThrottle( Integer.parseInt(args[2]) );
 			}
 			catch (Exception e)
 			{

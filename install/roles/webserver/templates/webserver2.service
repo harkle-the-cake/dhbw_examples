@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=www-data
 WorkingDirectory={{ app_root }}/
-ExecStart=/bin/sh {{ app_root }}/start.sh single 9000
+ExecStart=/bin/sh {{ app_root }}/start.sh multi 9001
 SuccessExitStatus=143
 TimeoutStopSec=10
 Restart=always

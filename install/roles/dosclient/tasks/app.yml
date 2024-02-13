@@ -1,0 +1,14 @@
+- name: copy the app to the target
+  copy:
+    src: "{{ build_root }}/dosclient-{{ version }}.jar"
+    dest: "{{ app_root }}/client.jar"
+    remote_src: no
+  become: yes
+  tags: app
+- name: copy the app start file to the target
+  copy:
+    src: "start.sh"
+    dest: "{{ app_root }}"
+    remote_src: no
+  become: yes
+  tags: app

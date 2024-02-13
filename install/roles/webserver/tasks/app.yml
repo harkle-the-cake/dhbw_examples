@@ -23,3 +23,14 @@
   service:
     name: webserver
     state: restarted
+- name: register the server as linux service
+  template:
+    src: "webserver2.service"
+    dest: "/etc/systemd/system/"
+    remote_src: no
+  become: yes
+  tags: app
+- name: Restart service in all cases
+  service:
+    name: webserver2
+    state: restarted

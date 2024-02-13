@@ -1,0 +1,3 @@
+web_root: "/var/www"
+app_root: "/var/app/dosclient"
+build_root: "/home/pi/build"
