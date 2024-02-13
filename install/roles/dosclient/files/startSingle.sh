@@ -1,1 +1,0 @@
-java -jar dosclient.jar single
