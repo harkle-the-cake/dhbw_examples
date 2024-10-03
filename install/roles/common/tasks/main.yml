@@ -16,6 +16,14 @@
       become: yes
       tags: os
 #- import_tasks: folders.yml
+- name: Add the user 'student' with a bash shell, appending the group 'admins' and 'developers' to the user's groups
+  ansible.builtin.user:
+    name: student
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+    create_home: yes
+    password: "{{ passwd }}"
 - name: clear tmp directory
   file:
     path: /tmp/deploy
