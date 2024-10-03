@@ -2,15 +2,15 @@
 192.168.180.20 type=internal ansible_user=pi hostname=proxy
 
 [appserver]
-192.168.180.21 type=internal ansible_user=pi hostname=v3
+192.168.180.65 type=internal ansible_user=pi hostname=v3
 
 [monitoring]
 192.168.180.22 type=internal ansible_user=pi hostname=monitoring
 
 [webserver]
-192.168.180.157 type=internal ansible_user=pi hostname=vs1
+192.168.180.65 type=internal ansible_user=pi hostname=vs1
 
 [dosclient]
-192.168.180.157 type=internal ansible_user=pi hostname=vs1
-192.168.180.156 type=internal ansible_user=pi hostname=vs2
-192.168.180.155 type=internal ansible_user=pi hostname=vs3
+192.168.180.67 type=internal ansible_user=pi hostname=vs1
+192.168.180.66 type=internal ansible_user=pi hostname=vs2
+192.168.180.65 type=internal ansible_user=pi hostname=vs3
