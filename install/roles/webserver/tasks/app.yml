@@ -1,6 +1,6 @@
 - name: copy the app to the target
   copy:
-    src: "{{ build_root }}/webserver-{{ version }}.jar"
+    src: "{{ build_root }}webserver-{{ version }}.jar"
     dest: "{{ app_root }}/server.jar"
     remote_src: no
   become: yes
