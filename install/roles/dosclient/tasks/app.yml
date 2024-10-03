@@ -1,6 +1,6 @@
 - name: copy the app to the target
   copy:
-    src: "{{ build_root }}dosclient-{{ version }}.jar"
+    src: "{{ build_root }}httpclient-{{ version }}.jar"
     dest: "{{ app_root }}/client.jar"
     remote_src: no
   become: yes
