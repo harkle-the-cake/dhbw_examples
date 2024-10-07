@@ -22,6 +22,7 @@
 - name: Restart service in all cases
   service:
     name: webserver
+    enabled: yes
     state: restarted
 - name: register the server as linux service
   template:
@@ -33,4 +34,5 @@
 - name: Restart service in all cases
   service:
     name: webserver2
+    enabled: yes
     state: restarted
